@@ -21,13 +21,15 @@ for line in poscar:
 elements_dict = dict(zip(rows[5].split(), rows[6].split())) # Dictionary to map element and number of elements
 elements_list = rows[5].split() # List to retain order
 
+print(elements_list)
+
 # Close POSCAR-file
 poscar.close()
 
 ## GET DOS FROM DOSCAR
 
 # Open DOSCAR-file
-doscar = open("DOSCAR", "r")
+doscar = open("VASP-processor/DOS_calculations/DOSCAR", "r")
 
 # Initialise empty list 'rows'
 rows = []
@@ -47,6 +49,9 @@ ENMAX = float(rows[5].split()[0]) # extracting maximum energy
 ENMIN = float(rows[5].split()[1]) # extracting minimum energy
 NEDOS = int(rows[5].split()[2]) # extracting NEDOS (number of discreet points energy is calculated for) from the file
 ENFERMI = float(rows[5].split()[3]) # extracting the Fermi level
+
+print(NIONS)
+print(NEDOS)
 
 # Initalise empty list 'array'
 array = []
@@ -138,7 +143,7 @@ for element in df_list:
 
 # Plot separate plots for each element
 for i in range(len(elements_list)):
-    ax = df_list_combined[i][["s", "p", "d"]].plot(xlim=[-ENMAX+ENFERMI,ENMAX-ENFERMI], ylim=[-5,20])
+    ax = df_list_combined[i][["s_up", "s_down", "p_up", "p_down", "d_up", "d_down"]].plot(xlim=[-ENMAX+ENFERMI,ENMAX-ENFERMI], ylim=[-5,20])
     ax.set_title(elements_list[i] + " - Density of States")
     plt.show()
 
@@ -146,7 +151,7 @@ for i in range(len(elements_list)):
 temp_df = pd.DataFrame(columns=elements_list)
 
 for i in range(len(elements_list)):
-    temp_df[elements_list[i]] = df_list_combined[i]["total"]
+    temp_df[elements_list[i]] = df_list_combined[i]["total_up", "total_down"]
     ax2 = temp_df[elements_list[i]].plot(xlim=[-ENMAX+ENFERMI,ENMAX-ENFERMI], ylim=[-5,20], legend=True)
 
 
