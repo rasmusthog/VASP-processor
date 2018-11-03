@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+### GET INFORMATION ABOUT THE COMPOSITION. SHOULD PROBABLY MAKE THIS A SEPARATE FUNCTION
 
 # Open POSCAR file
 poscar = open("OUTCAR/POSCAR", "r")
@@ -19,21 +20,26 @@ elements_dict = dict(zip(rows[5].split(), rows[6].split())) # Dictionary to map 
 # Close POSCAR-file
 poscar.close()
 
+# Count number of ions in POSCAR
 NIONS = 0
 
 for element in elements_dict:
     NIONS += int(elements_dict[element])
 
 
+### READ OUTCAR FILE
 
+
+# Open OUTCAR-file
 outcar = open("OUTCAR/OUTCAR", "r")
 
+# Count number of lines in OUTCAR-file
 number_of_lines = 0
 
 for line in outcar:
     number_of_lines += 1
 
-# Reset
+# Reset IOWrapper to 
 outcar.seek(number_of_lines - 1000)
 
 
