@@ -1,16 +1,15 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from POSCAR.load_poscar import load_poscar
-from POSCAR.get_elements import get_elements
+import poscar as pc
 
 ### GET INFORMATION ABOUT THE COMPOSITION. SHOULD PROBABLY MAKE THIS A SEPARATE FUNCTION
 
 # Open POSCAR file
-poscar = get_poscar(POSCAR)
+poscar = pc.load_poscar('import_tools/testfiles/POSCAR')
 
 # Get information on composition (atoms and number of atoms) from POSCAR
-elements_dict, elements_list = get_elements(poscar)
+elements_dict, elements_list = pc.get_elements(poscar)
 
 # Count number of ions in POSCAR
 NIONS = 0
