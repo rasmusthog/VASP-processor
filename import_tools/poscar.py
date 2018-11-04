@@ -13,9 +13,6 @@ def load_poscar(path):
     return poscar
 
 
-
-
-
 def get_elements(poscar):
     """ Disects an array of rows from POSCAR into a dictionary containing elements
     and number of each, and a list containing elements (for order preservation)
