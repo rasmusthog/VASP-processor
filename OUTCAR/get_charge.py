@@ -20,7 +20,15 @@ def get_charge(charge_df, orbital='tot', element=0, avg=True):
     if element > len(elements_list):
         return null
 
+
+    # Sum charges for chosen element
+
     if element = 0:
-        charge = charge_df[orbital].sum()
+        if avg = True:
+            charge = charge_df[orbital].avg()
+        else:
+            charge = charge_df[orbital].sum()
+
     else:
-        charge = charge_df[orbital].iloc[charge_df['element'] == elements_list[element-1]]
+        if avg = True:
+        charge = charge_df[orbital].iloc[charge_df['element'] == elements_list[element-1]].avg()
