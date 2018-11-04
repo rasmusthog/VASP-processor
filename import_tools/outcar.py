@@ -66,6 +66,17 @@ def get_charge_magnetisation(outcar, number_of_lines, poscar_path):
     charge_df.set_index("ion", inplace=True)
     charge_df = charge_df.astype(float)
 
+
+    # Add element label to column 'element' in charge_df
+    start = 0
+    charge_df["element"] = "NaN"
+
+    for element in elements_list:
+        index = int(elements_dict[element])
+        charge_df["element"][start:index+start] = element
+
+        start += index
+
     ## Add magnetisation of ions to array 'magnetisation'
     magnetisation = []
 
@@ -75,6 +86,16 @@ def get_charge_magnetisation(outcar, number_of_lines, poscar_path):
     magnetisation_df = pd.DataFrame(magnetisation, columns=["ion", "s", "p", "d", "tot"])
     magnetisation_df.set_index("ion", inplace=True)
     magnetisation_df = magnetisation_df.astype(float)
+
+    # Add element label to column 'element' in charge_df
+    start = 0
+    magnetisation_df["element"] = "NaN"
+
+    for element in elements_list:
+        index = int(elements_dict[element])
+        magnetisation_df["element"][start:index+start] = element
+
+        start += index
 
 
     return charge_df, magnetisation_df
@@ -106,7 +127,7 @@ def calc_charge(charge_df, orbital='tot', element=0, avg=True):
     if element > len(elements_list):
         return null
 
-    if element = 0:
+    if element == 0:
         charge = charge_df[orbital].sum()
     else:
         charge = charge_df[orbital].iloc[charge_df['element'] == elements_list[element-1]]
