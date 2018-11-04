@@ -1,24 +1,16 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from POSCAR.load_poscar import load_poscar
+from POSCAR.get_elements import get_elements
 
 ### GET INFORMATION ABOUT THE COMPOSITION. SHOULD PROBABLY MAKE THIS A SEPARATE FUNCTION
 
 # Open POSCAR file
-poscar = open("OUTCAR/POSCAR", "r")
-
-# Initialise empty list 'rows'
-rows = []
-
-# Add POSCAR-file line by line into list 'rows'
-for line in poscar:
-    rows.append(line)
+poscar = get_poscar(POSCAR)
 
 # Get information on composition (atoms and number of atoms) from POSCAR
-elements_dict = dict(zip(rows[5].split(), rows[6].split())) # Dictionary to map element and number of elements
-
-# Close POSCAR-file
-poscar.close()
+elements_dict, elements_list = get_elements(poscar)
 
 # Count number of ions in POSCAR
 NIONS = 0
@@ -39,7 +31,7 @@ number_of_lines = 0
 for line in outcar:
     number_of_lines += 1
 
-# Reset IOWrapper to 
+# Reset IOWrapper to
 outcar.seek(number_of_lines - 1000)
 
 
@@ -56,6 +48,8 @@ for line in outcar:
         outcar_list.append(line)
 
 ## Add total charge of ions to array 'total_charge'
+
+outcar.close()
 
 total_charge = []
 
@@ -77,8 +71,3 @@ for i in range(NIONS+19,(2*NIONS)+19):
 magnetisation_df = pd.DataFrame(magnetisation, columns=["ion", "s", "p", "d", "tot"])
 magnetisation_df.set_index("ion", inplace=True)
 magnetisation_df = magnetisation_df.astype(float)
-
-
-
-
-outcar.close()
