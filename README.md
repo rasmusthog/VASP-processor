@@ -6,6 +6,11 @@ Will include (near future):
 - DOSCAR-reader
   - Extract data from DOSCAR
   - Plot density of states
+  - Return band gap
+  
+- OUTCAR-reader
+  - Extract total charge and magnetisation from converged structure
+  - Average bond lengths (with standard deviation)
   
  
  - INCAR-reader
@@ -15,4 +20,5 @@ Will include (near future):
  May include (distant future):
  
  - Animation of evolution of atomic positions during relaxation (from OUTCAR)
+ - Python-implementation of Bader charge analysis
  
