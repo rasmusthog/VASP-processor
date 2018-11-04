@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 
 import poscar as pc
 
+pd.options.mode.chained_assignment = None
+
 def load_outcar(path):
     """ Opens OUTCAR file from 'path' and returns IOWrapper and number of lines """
 
@@ -105,7 +107,7 @@ def get_charge_magnetisation(outcar, number_of_lines, poscar_path):
 
 
 
-def calc_charge(charge_df, orbital='tot', element=0, avg=True):
+def calc_charge(charge_df, poscar_path, orbital='tot', element=0, avg=True):
     """ Returns the charge for a given element.
 
     Keyword arguments:
@@ -119,18 +121,34 @@ def calc_charge(charge_df, orbital='tot', element=0, avg=True):
     charge = 0
 
     # Get elements list
-    poscar = load_poscar('OUTCAR/POSCAR')
-    elements_dict, elements_list = get_elements(poscar)
+    poscar = pc.load_poscar(poscar_path)
+    elements_dict, elements_list = pc.get_elements(poscar)
 
-    # Test if argument 'element' is valid
+    # Test if argument 'element' is valid. IN FUTURE MUST THROW ERROR
 
     if element > len(elements_list):
         return null
 
-    if element == 0:
-        charge = charge_df[orbital].sum()
-    else:
-        charge = charge_df[orbital].iloc[charge_df['element'] == elements_list[element-1]]
+    # If avg == True, return the average of the charges
+    if avg == True:
+        # Return charge for all elements
+        if element == 0:
+            charge = charge_df[[orbital]].mean()
+        # Return charge for specific element
+        else:
+            charge = charge_df[[orbital]].loc[charge_df['element'] == elements_list[element-1]].mean()
+
+    # If avg == False, return the sum of the charges
+    elif avg == False:
+        # Return charge for all elements
+        if element == 0:
+            charge = charge_df[[orbital]].sum()
+        # Return charge for specific element
+        else:
+            charge = charge_df[[orbital]].loc[charge_df['element'] == elements_list[element-1]].sum()
+
+    # If avg is set to anything other than True or False, return null
+    else: return null
 
 
-    print(charge_df["d"].iloc[1:8].sum())
+    return charge
