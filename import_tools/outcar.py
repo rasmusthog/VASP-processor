@@ -152,3 +152,51 @@ def calc_charge(charge_df, poscar_path, orbital='tot', element=0, avg=True):
 
 
     return charge
+
+
+
+def calc_magnetisation(magnetisation_df, poscar_path, orbital='tot', element=0, avg=True):
+    """ Returns the magnetisation for a given element.
+
+    Keyword arguments:
+    magnetisation_df -- pandas DataFrame containing total charge from OUTCAR
+    orbital -- which orbital to get charge for. Choices: 's', 'p', 'd', 'tot'. (default='tot')
+    element -- which element to get charge for. 0 = all, 1 = first element defined in POSCAR etc. (default=0)
+    avg -- determines whether the average of the charge is returned (True) or total (False) (default=True)
+
+    """
+
+    charge = 0
+
+    # Get elements list
+    poscar = pc.load_poscar(poscar_path)
+    elements_dict, elements_list = pc.get_elements(poscar)
+
+    # Test if argument 'element' is valid. IN FUTURE MUST THROW ERROR
+
+    if element > len(elements_list):
+        return null
+
+    # If avg == True, return the average of the charges
+    if avg == True:
+        # Return charge for all elements
+        if element == 0:
+            magnetisation = magnetisation_df[[orbital]].mean()
+        # Return charge for specific element
+        else:
+            magnetisation = magnetisation_df[[orbital]].loc[magnetisation_df['element'] == elements_list[element-1]].mean()
+
+    # If avg == False, return the sum of the charges
+    elif avg == False:
+        # Return charge for all elements
+        if element == 0:
+            magnetisation = magnetisation_df[[orbital]].sum()
+        # Return charge for specific element
+        else:
+            magnetisation = magnetisation_df[[orbital]].loc[magnetisation_df['element'] == elements_list[element-1]].sum()
+
+    # If avg is set to anything other than True or False, return null
+    else: return null
+
+
+    return magnetisation

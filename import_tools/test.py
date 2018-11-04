@@ -25,3 +25,7 @@ charge_df, mag_df = oc.get_charge_magnetisation(outcar, no_lines, poscar_path)
 # Test oc.calc_charge
 
 print(oc.calc_charge(charge_df, poscar_path, orbital="d", element=1, avg=True))
+
+# Test oc.calc_magnetisation
+
+print(oc.calc_magnetisation(mag_df, poscar_path, orbital="d", element=1, avg=False))
