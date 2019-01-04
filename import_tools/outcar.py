@@ -103,10 +103,6 @@ def get_charge_magnetisation(outcar, number_of_lines, poscar_path):
     return charge_df, magnetisation_df
 
 
-
-
-
-
 def calc_charge(charge_df, poscar_path, orbital='tot', element=0, avg=True):
     """ Returns the charge for a given element.
 
@@ -152,7 +148,6 @@ def calc_charge(charge_df, poscar_path, orbital='tot', element=0, avg=True):
 
 
     return charge
-
 
 
 def calc_magnetisation(magnetisation_df, poscar_path, orbital='tot', element=0, avg=True):
@@ -202,7 +197,6 @@ def calc_magnetisation(magnetisation_df, poscar_path, orbital='tot', element=0, 
     return magnetisation
 
 
-
 def get_pulay_stress(outcar, number_of_lines):
 
         outcar.seek(number_of_lines - 1000)
@@ -223,5 +217,5 @@ def get_pulay_stress(outcar, number_of_lines):
 
         pulay_stress['external_pressure'] = ext_pressure_strings[-1][21:37]
         pulay_stress['pulay_stress'] = ext_pressure_strings[-1][53:69]
-                
+
         return pulay_stress
