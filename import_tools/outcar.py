@@ -53,7 +53,7 @@ def get_charge_magnetisation(outcar, number_of_lines, poscar_path):
         if found == True:
             outcar_list.append(line)
 
-    outcar.close()
+
 
 
     # Add total charge of ions to array 'total_charge'
@@ -200,3 +200,28 @@ def calc_magnetisation(magnetisation_df, poscar_path, orbital='tot', element=0, 
 
 
     return magnetisation
+
+
+
+def get_pulay_stress(outcar, number_of_lines):
+
+        outcar.seek(number_of_lines - 1000)
+
+        # Create list of only relevant information (after 'reached required accuracy')
+        found = False
+
+        ext_pressure_strings = []
+        pulay_stress = {'external_pressure': 0,
+                        'pulay_stress': 0}
+
+
+        for line in outcar:
+            # Check if 'reached required accuracy' is in line
+            if 'external pressure =' in line:
+                ext_pressure_strings.append(line)
+
+
+        pulay_stress['external_pressure'] = ext_pressure_strings[-1][21:37]
+        pulay_stress['pulay_stress'] = ext_pressure_strings[-1][53:69]
+                
+        return pulay_stress
