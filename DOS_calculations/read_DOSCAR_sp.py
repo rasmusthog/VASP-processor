@@ -98,12 +98,12 @@ PDOS_df["element"] = "NaN"
 
 # Loop over elements_list to get the correct order. Fetch number of atoms for that element from
 # the element list
-total = 0
+start = 0
 for element in elements_list:
     index = int(elements_dict[element])*NEDOS
-    PDOS_df["element"][total:index+total] = element
+    PDOS_df["element"][start:index+start] = element
 
-    total += index
+    start += index
 
 
 ## Sum all atoms of same element into single value
