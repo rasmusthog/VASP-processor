@@ -10,7 +10,27 @@ def load_poscar(path):
     for line in f:
         poscar.append(line)
 
+
+    f.close()
+
     return poscar
+
+def load_contcar(path):
+    """ Loads CONTCAR file into an array of lists """
+
+    f = open(path, "r")
+
+    # Initialise empty list 'rows'
+    contcar = []
+
+    # Add POSCAR-file line by line into list 'rows'
+    for line in f:
+        contcar.append(line)
+
+
+    f.close()
+
+    return contcar
 
 
 def get_elements(poscar):
@@ -23,3 +43,47 @@ def get_elements(poscar):
     elements_list = poscar[5].split() # List to retain order
 
     return elements_dict, elements_list
+
+
+def calc_diff_poscar_contcar(poscar, contcar):
+
+    # Initalise lists for coordinates from POSCAR and CONTCAR
+    poscar_lattice_coordinates = []
+    contcar_lattice_coordinates = []
+
+
+    # Extract POSCAR coordinates
+    temp_list_poscar = [] # temp list for use in for-loop
+
+    for i in range(2,5):
+        temp_list_poscar = poscar[i].split()
+
+        temp_list_poscar = [ float(x) for x in temp_list_poscar]
+
+        poscar_lattice_coordinates.append(temp_list_poscar)
+
+
+    # Extract CONTCAR coordinates
+    temp_list_contcar = [] # temp list for use in for-loop
+
+    for i in range(2,5):
+        temp_list_contcar = contcar[i].split()
+
+        temp_list_contcar = [ float(x) for x in temp_list_contcar]
+
+        contcar_lattice_coordinates.append(temp_list_contcar)
+
+
+    # Calculate differences
+
+    a_diff = []
+    b_diff = []
+    c_diff = []
+
+    for i in range(0,3):
+        a_diff.append(contcar_lattice_coordinates[0][i] - poscar_lattice_coordinates[0][i])
+        b_diff.append(contcar_lattice_coordinates[1][i] - poscar_lattice_coordinates[1][i])
+        c_diff.append(contcar_lattice_coordinates[2][i] - poscar_lattice_coordinates[2][i])
+
+
+    return a_diff, b_diff, c_diff
