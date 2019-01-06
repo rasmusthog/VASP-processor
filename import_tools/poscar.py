@@ -72,10 +72,58 @@ def get_lattice_constants(poscar):
 
     return coordinates_df
 
+def calc_angles(poscar):
+    lattice_constants = get_lattice_constants(poscar)
+    lattice_vector_lengths = calc_lattice_vector_lengths(poscar)
+    angles = []
+
+    angles.append(np.round(np.arccos((np.dot(lattice_constants["b"],lattice_constants["c"]))/(lattice_vector_lengths[1]*lattice_vector_lengths[2])) * 180/np.pi, decimals=2))
+    angles.append(np.round(np.arccos((np.dot(lattice_constants["a"],lattice_constants["c"]))/(lattice_vector_lengths[0]*lattice_vector_lengths[2])) * 180/np.pi, decimals=2))
+    angles.append(np.round(np.arccos((np.dot(lattice_constants["a"],lattice_constants["b"]))/(lattice_vector_lengths[0]*lattice_vector_lengths[1])) * 180/np.pi, decimals=2))
+
+
+    return angles
+
+
+def determine_unit_cell_type(poscar):
+
+    unit_cell = "NaN"
+    lattice_constants = get_lattice_constants(poscar)
+    lattice_vector_lengths = calc_lattice_vector_lengths(poscar)
+    angles = calc_angles(poscar)
+
+    if (angles[0] == 90 and angles[1] == 90 and angles[2] == 90):
+        if (lattice_vector_lengths[0] == lattice_vector_lengths[1]) and (lattice_vector_lengths[0] == lattice_vector_lengths[2]):
+            unit_cell = "c"
+
+        elif (lattice_vector_lengths[0] == lattice_vector_lengths[1] and lattice_vector_lengths[0] != lattice_vector_lengths[2]) or (lattice_vector_lengths[0] == lattice_vector_lengths[2] and lattice_vector_lengths[0] != lattice_vector_lengths[1]) or (lattice_vector_lengths[1] == lattice_vector_lengths[2] and lattice_vector_lengths[1] != lattice_vector_lengths[0]):
+            unit_cell = "t"
+
+        else:
+            unit_cell = "o"
+
+
+    elif (angles[0] == 90 and angles[1] == 90 and angles[2] == 120) or (angles[0] == 90 and angles[2] == 90 and angles[1] == 120) or (angles[1] == 90 and angles[2] == 90 and angles[0] == 120):
+        unit_cell = "h"
+
+    elif (angles[0] != 90) and (angles[0] == angles[1] and angles[0] == angles[2]):
+        unit_cell = "r"
+
+    elif (angles[0] == 90.0 and angles[1] != 90.0 and angles[2] == 90.0)  or (angles[0] == 90 and angles[1] == 90 and angles[2] != 90) or (angles[0] != 90 and angles[1] == 90 and angles[2] == 90):
+        unit_cell = "m"
+
+    else:
+        unit_cell = "a"
+
+
+    return unit_cell
+
 
 def calc_lattice_vector_lengths(poscar):
     """ Takes a dataframe of coordinates (obtained from POSCAR through get_lattice_constants()),
     and returns a list of lattice vector lengths using the formula sqrt(x^2 + y^2 + z^2)"""
+
+    ## Might be able to simplify this by calculating the dot product directly from the dataframe.
 
     lattice_vector_lengths = [] # initialise empty list
 
