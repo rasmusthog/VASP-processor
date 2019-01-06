@@ -103,7 +103,7 @@ def determine_unit_cell_type(poscar):
             unit_cell = "o"
 
 
-    elif (angles[0] == 90 and angles[1] == 90 and angles[2] == 120) or (angles[0] == 90 and angles[2] == 90 and angles[1] == 120) or (angles[1] == 90 and angles[2] == 90 and angles[0] == 120):
+    elif (angles[0] == 90 and angles[1] == 90 and angles[2] == 120 and lattice_vector_lengths[0] == lattice_vector_lengths[1]) or (angles[0] == 90 and angles[1] == 120 and angles[2] == 90 and lattice_vector_lengths[0] == lattice_vector_lengths[2]) or (angles[0] == 120 and angles[1] == 90 and angles[2] == 90 and lattice_vector_lengths[1] == lattice_vector_lengths[2]):
         unit_cell = "h"
 
     elif (angles[0] != 90) and (angles[0] == angles[1] and angles[0] == angles[2]):
@@ -136,7 +136,50 @@ def calc_lattice_vector_lengths(poscar):
 
 
     # return square root of the sums
-    return np.sqrt(lattice_vector_lengths)
+    return np.round(np.sqrt(lattice_vector_lengths), decimals=4)
+
+
+def calc_unit_cell_volume(poscar):
+
+    lattice_vector_lengths = calc_lattice_vector_lengths(poscar)
+    lattice_angles = calc_angles(poscar)
+    unit_cell = determine_unit_cell_type(poscar)
+    volume = 1
+
+    if unit_cell == "c" or unit_cell == "t" or unit_cell == "o":
+        # Formula c: a^3. Formula t: a^2c. Formula o: abc
+        for i in range(0,3):
+            volume = volume * lattice_vector_lengths[i]
+
+    elif unit_cell == "h":
+        # formula: sqrt(3) / 2 * a^2c
+        for i in range(0,3):
+            volume = volume * lattice_vector_lengths[i]
+
+        volume = volume * np.sqrt(3)/2
+
+    elif unit_cell == "r":
+        # formula: a^3 *sqrt(1-3cos^2 alpha + 2cos^3 alpha)
+        for i in range(0,3):
+            volume = volume * lattice_vector_lengths[i]
+
+        volume = volume * np.sqrt(1 - 3*np.cos(lattice_angles[0] * np.pi/180)**2 + 2*np.cos(lattice_angles[0] * np.pi / 180)**3)
+
+
+    elif unit_cell == "m":
+        # Formula: abc sin beta (for unique b axis). Since sin 90 = 1, the below formula is safe.
+        for i in range(0,3):
+            volume = volume * lattice_vector_lengths[i] * np.sin(lattice_angles[i] * np.pi / 180)
+
+    elif unit_cell == "a":
+        # Formula: abc * sqrt(1 - cos^2 alpha - cos^2 beta - cos^2 gamma + 2cos alpha cos beta cos gamma)
+
+        volume = lattice_vector_lengths[0]*lattice_vector_lengths[1]*lattice_vector_lengths[2] * np.sqrt(1-np.cos(lattice_angles[0]* np.pi / 180)**2 - np.cos(lattice_angles[1]* np.pi / 180)**2 - np.cos(lattice_angles[2]* np.pi / 180)**2 + 2*np.cos(lattice_angles[0]* np.pi / 180)*np.cos(lattice_angles[1]* np.pi / 180)*np.cos(lattice_angles[2]* np.pi / 180))
+
+
+    return volume
+
+
 
 
 def calc_lattice_constant_diff(poscar, contcar):
@@ -153,3 +196,10 @@ def calc_lattice_vector_lengths_diff(poscar, contcar):
     contcar_lengths = calc_lattice_vector_lengths(contcar)
 
     return contcar_lengths - poscar_lengths
+
+
+def calc_unit_cell_volume_diff(poscar, contcar):
+    poscar_volume = calc_unit_cell_volume(poscar)
+    contcar_volume = calc_unit_cell_volume(contcar)
+
+    return contcar_volume - poscar_volume

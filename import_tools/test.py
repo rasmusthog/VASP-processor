@@ -59,24 +59,62 @@ lattice_vectors_diff = pc.calc_lattice_vector_lengths_diff(poscar, contcar)
 #print(lattice_vectors_diff)
 
 # Test calculations of angles.
-
+print("Cubic:")
 print(pc.calc_angles(poscar_c)) # should be 90, 90, 90
+print(pc.calc_lattice_vector_lengths(poscar_c))
+print("Volume: " + str(pc.calc_unit_cell_volume(poscar_c)) + " Angstrom")
+print("Unit cell:  " + pc.determine_unit_cell_type(poscar_c))
+
+print("Tetragonal:")
 print(pc.calc_angles(poscar_t)) # should be 90, 90, 90
+print(pc.calc_lattice_vector_lengths(poscar_t))
+print("Volume: " + str(pc.calc_unit_cell_volume(poscar_t)) + " Angstrom")
+print("Unit cell:  " + pc.determine_unit_cell_type(poscar_t))
+
+print("Orthorhombic:")
 print(pc.calc_angles(poscar_o)) # should be 90, 90, 90
-print(pc.calc_angles(poscar_r))
-print(pc.calc_angles(poscar_h))
-print(pc.calc_angles(poscar_m))
-print(pc.calc_angles(poscar_a))
+print(pc.calc_lattice_vector_lengths(poscar_o))
+print("Volume: " + str(pc.calc_unit_cell_volume(poscar_o)) + " Angstorm")
+print("Unit cell:  " +pc. determine_unit_cell_type(poscar_o))
+
+print("Rhomohedral")
+print(pc.calc_angles(poscar_r)) # should be alpha, alpha, alpha - alpha != 90
+print(pc.calc_lattice_vector_lengths(poscar_r))
+print("Volume: " + str(pc.calc_unit_cell_volume(poscar_r)) + " Angstorm")
+print("Unit cell:  " + pc.determine_unit_cell_type(poscar_r))
+
+print("Hexagonal:")
+print(pc.calc_angles(poscar_h)) # should be 90, 90, 120
+print(pc.calc_lattice_vector_lengths(poscar_h))
+print("Volume: " + str(pc.calc_unit_cell_volume(poscar_h)) + " Angstrom")
+print("Unit cell:  " + pc.determine_unit_cell_type(poscar_h))
+
+print("Monoclinic:")
+print(pc.calc_angles(poscar_m)) # should be 90, 90, alpha, alpha != 90
+print(pc.calc_lattice_vector_lengths(poscar_m))
+print("Volume: " + str(pc.calc_unit_cell_volume(poscar_m)) + " Angstrom")
+print("Unit cell:  " + pc.determine_unit_cell_type(poscar_m))
+
+print("Triclinic:")
+print(pc.calc_angles(poscar_a)) # should be
+print(pc.calc_lattice_vector_lengths(poscar_a))
+print("Volume: " + str(pc.calc_unit_cell_volume(poscar_a)) + " Angstrom")
+print("Unit cell:  " + pc.determine_unit_cell_type(poscar_a))
+
+
+
+
+print(pc.calc_unit_cell_volume_diff(poscar, contcar))
 
 # Test of unit cell types
 
-print("This should be cubic:  " + pc.determine_unit_cell_type(poscar_c))
-print("This should be tetragonal:  " + pc.determine_unit_cell_type(poscar_t))
-print("This should be orthorhombic:  " +pc. determine_unit_cell_type(poscar_o))
-print("This should be rhombohedral:  " + pc.determine_unit_cell_type(poscar_r))
-print("This should be hexagonal:  " + pc.determine_unit_cell_type(poscar_h))
-print("This should be monoclinic:  " + pc.determine_unit_cell_type(poscar_m))
-print("This should be triclinic:  " + pc.determine_unit_cell_type(poscar_a))
+
+
+
+
+
+
+
 
 
 #print(charge_df.head())
