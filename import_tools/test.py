@@ -30,10 +30,13 @@ coords = pc.calc_lattice_constant_diff(poscar, contcar)
 print(coords)
 
 
+lattice_vectors_cont = pc.calc_lattice_vector_lengths(contcar)
+lattice_vectors_pos = pc.calc_lattice_vector_lengths(poscar)
+lattice_vectors_diff = pc.calc_lattice_vector_lengths_diff(poscar, contcar)
 
-lattice_vectors = pc.calc_lattice_vector_lengths(pc.get_lattice_constants(poscar))
-
-print(lattice_vectors)
+print(lattice_vectors_cont)
+print(lattice_vectors_pos)
+print(lattice_vectors_diff)
 
 
 #print(charge_df.head())
