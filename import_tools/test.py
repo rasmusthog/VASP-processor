@@ -2,8 +2,8 @@ import poscar as pc
 import outcar as oc
 import os
 
-print(os.getcwd())
-poscar_path = '/import_tools/testfiles/POSCAR'
+
+poscar_path = 'import_tools/testfiles/POSCAR'
 outcar_path = 'import_tools/testfiles/OUTCAR'
 contcar_path = 'import_tools/testfiles/CONTCAR'
 
@@ -26,7 +26,7 @@ contcar = pc.load_contcar(contcar_path)
 #pulay_stress = oc.get_pulay_stress(outcar, no_lines)
 
 
-coords = pc.calc_diff_poscar_contcar(poscar, contcar)
+coords = pc.get_lattice_constants(poscar)
 print(coords)
 
 

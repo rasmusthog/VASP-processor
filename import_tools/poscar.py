@@ -1,3 +1,6 @@
+import pandas as pd
+
+
 def load_poscar(path):
     """ Loads POSCAR file into an array of lists """
 
@@ -43,6 +46,31 @@ def get_elements(poscar):
     elements_list = poscar[5].split() # List to retain order
 
     return elements_dict, elements_list
+
+
+def get_lattice_constants(poscar):
+
+    poscar_lattice_coordinates = [] # initialise list
+    temp_list_poscar = [] # temp list for use in for-loop
+
+
+    # Iterate over POSCAR-file to get out lines containing lattice constants
+    for i in range(2,5):
+        temp_list_poscar = poscar[i].split() # make list from string, split on whitespace
+
+        temp_list_poscar = [ float(x) for x in temp_list_poscar] # convert strings to float
+
+        poscar_lattice_coordinates.append(temp_list_poscar) # append list to a list of lists contianing all coordinates
+
+
+    a_coordinates = poscar_lattice_coordinates[0]
+    b_coordinates = poscar_lattice_coordinates[1]
+    c_coordinates = poscar_lattice_coordinates[2]
+
+    coordinates_df = pd.DataFrame({"a": a_coordinates, "b": b_coordinates, "c": c_coordinates})
+
+    return coordinates_df
+
 
 
 def calc_diff_poscar_contcar(poscar, contcar):
