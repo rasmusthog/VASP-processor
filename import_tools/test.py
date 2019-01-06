@@ -26,8 +26,9 @@ contcar = pc.load_contcar(contcar_path)
 #pulay_stress = oc.get_pulay_stress(outcar, no_lines)
 
 
-coords = pc.get_lattice_constants(poscar)
-print(coords)
+coords_old, coords_new = pc.calc_diff_poscar_contcar(poscar, contcar)
+print(coords_old)
+print(coords_new)
 
 
 #print(charge_df.head())

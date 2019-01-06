@@ -73,51 +73,12 @@ def get_lattice_constants(poscar):
 
 
 
-def calc_diff_poscar_contcar(poscar, contcar):
+def calc_lattice_constant_diff(poscar, contcar):
 
-    # Initalise lists for coordinates from POSCAR and CONTCAR
-    poscar_lattice_coordinates = []
-    contcar_lattice_coordinates = []
+    poscar_coordinates = get_lattice_constants(poscar)
+    contcar_coordinates = get_lattice_constants(contcar)
 
+    coordinates_diff_df_new = contcar_coordinates - poscar_coordinates
 
-    # Extract POSCAR coordinates
-    temp_list_poscar = [] # temp list for use in for-loop
-
-    for i in range(2,5):
-        temp_list_poscar = poscar[i].split()
-
-        temp_list_poscar = [ float(x) for x in temp_list_poscar]
-
-        poscar_lattice_coordinates.append(temp_list_poscar)
-
-
-    # Extract CONTCAR coordinates
-    temp_list_contcar = [] # temp list for use in for-loop
-
-    for i in range(2,5):
-        temp_list_contcar = contcar[i].split()
-
-        temp_list_contcar = [ float(x) for x in temp_list_contcar]
-
-        contcar_lattice_coordinates.append(temp_list_contcar)
-
-
-    # Calculate differences
-
-
-    a_diff = []
-    b_diff = []
-    c_diff = []
-
-
-
-    for i in range(0,3):
-        a_diff.append(contcar_lattice_coordinates[0][i] - poscar_lattice_coordinates[0][i])
-        b_diff.append(contcar_lattice_coordinates[1][i] - poscar_lattice_coordinates[1][i])
-        c_diff.append(contcar_lattice_coordinates[2][i] - poscar_lattice_coordinates[2][i])
-
-
-    coordinates_diff_df = pd.DataFrame({"a": a_diff, "b": b_diff, "c": c_diff})
-
-    return coordinates_diff_df
+    return coordinates_diff_df_old, coordinates_diff_df_new
     #return a_diff, b_diff, c_diff
