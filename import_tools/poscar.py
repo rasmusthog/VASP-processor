@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 
 def load_poscar(path):
@@ -72,13 +73,29 @@ def get_lattice_constants(poscar):
     return coordinates_df
 
 
+def calc_lattice_vector_lengths(coordinates_df):
+    """ Takes a dataframe of coordinates (obtained from POSCAR through get_lattice_constants()),
+    and returns a list of lattice vector lengths using the formula sqrt(x^2 + y^2 + z^2)"""
+
+    lattice_vector_lengths = [] # initialise empty list
+
+    coordinates_df_square = coordinates_df ** 2 # square all numbers
+
+    # loop over all columns and add x, y and z components
+    for column in coordinates_df_square:
+        lattice_vector_lengths.append(coordinates_df_square[column].sum())
+
+
+    
+    # return square root of the sums
+    return np.sqrt(lattice_vector_lengths)
 
 def calc_lattice_constant_diff(poscar, contcar):
 
     poscar_coordinates = get_lattice_constants(poscar)
     contcar_coordinates = get_lattice_constants(contcar)
 
-    coordinates_diff_df_new = contcar_coordinates - poscar_coordinates
+    coordinates_diff_df = contcar_coordinates - poscar_coordinates
 
-    return coordinates_diff_df_old, coordinates_diff_df_new
+    return coordinates_diff_df
     #return a_diff, b_diff, c_diff
