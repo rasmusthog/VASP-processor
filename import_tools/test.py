@@ -1,9 +1,11 @@
 import poscar as pc
 import outcar as oc
+import os
 
-poscar_path = 'testfiles/POSCAR'
-outcar_path = 'testfiles/OUTCAR'
-contcar_path = 'testfiles/CONTCAR'
+print(os.getcwd())
+poscar_path = '/import_tools/testfiles/POSCAR'
+outcar_path = 'import_tools/testfiles/OUTCAR'
+contcar_path = 'import_tools/testfiles/CONTCAR'
 
 # Test pc.load_poscar
 poscar = pc.load_poscar(poscar_path)

@@ -76,9 +76,12 @@ def calc_diff_poscar_contcar(poscar, contcar):
 
     # Calculate differences
 
+
     a_diff = []
     b_diff = []
     c_diff = []
+
+
 
     for i in range(0,3):
         a_diff.append(contcar_lattice_coordinates[0][i] - poscar_lattice_coordinates[0][i])
@@ -86,4 +89,7 @@ def calc_diff_poscar_contcar(poscar, contcar):
         c_diff.append(contcar_lattice_coordinates[2][i] - poscar_lattice_coordinates[2][i])
 
 
-    return a_diff, b_diff, c_diff
+    coordinates_diff_df = pd.DataFrame({"a": a_diff, "b": b_diff, "c": c_diff})
+
+    return coordinates_diff_df
+    #return a_diff, b_diff, c_diff
